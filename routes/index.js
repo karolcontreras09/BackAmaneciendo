@@ -10,9 +10,14 @@ db.main().then(con => { connection = con});
 
 /* GET home page. */
 router.post('/usuario/registro', async function(req, res, next) {
-  const { nombre, direccion, usuario, contrasena } = req.body;
-  const [rows, fields] = await connection.execute('insert into cliente(nombre_cliente, email, contrasena, direccion_cliente) values(?,?,?,?)', [nombre, usuario, contrasena, direccion]);
-  res.json(rows);
+  try {
+    const { nombre, direccion, usuario, contrasena } = req.body;
+    const [rows, fields] = await connection.execute('insert into cliente(nombre_cliente, email, contrasena, direccion_cliente) values(?,?,?,?)', [nombre, usuario, contrasena, direccion]);
+    res.json(rows);
+  } catch (e) {
+    console.log(e);
+    res.json(e)
+  }
 });
 
 router.post('/login', async (req, res, next) => {
@@ -44,14 +49,4 @@ router.post('/login', async (req, res, next) => {
     )(req, res, next);
   }
 );
-
-router.post('/', function(req, res, next) {
-  res.json({ title: 'Expo' });
-});
-router.put('/', function(req, res, next) {
-  res.json({ title: 'Expre' });
-});
-router.delete('/', function(req, res, next) {
-  res.json({ title: 'Este' });
-});
 module.exports = router;
